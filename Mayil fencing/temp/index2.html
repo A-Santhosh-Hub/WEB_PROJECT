@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOYS Fencing - Your Fencing Solution in Salem, Tamil Nadu</title>
+    <link rel="icon" href="your-favicon.png" type="image/png">
+
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Optional: Smooth scroll for anchor links */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Floating WhatsApp Button */
+        .whatsapp-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366; /* WhatsApp green */
+            color: white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+        }
+        .whatsapp-button:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+    <header class="bg-blue-600 text-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold">BOYS FENCING</a>
+            <nav class="hidden md:flex space-x-6">
+                <a href="#about" class="hover:text-blue-200 transition duration-300">About Us</a>
+                <a href="#services" class="hover:text-blue-200 transition duration-300">Services</a>
+                <a href="#gallery" class="hover:text-blue-200 transition duration-300">Gallery</a>
+                <a href="#order" class="hover:text-blue-200 transition duration-300">Order Materials</a>
+                <a href="#testimonials" class="hover:text-blue-200 transition duration-300">Testimonials</a>
+                <a href="#faq" class="hover:text-blue-200 transition duration-300">FAQ</a>
+                <a href="#contact" class="hover:text-blue-200 transition duration-300">Contact Us</a>
+            </nav>
+
+            <div class="md:hidden">
+                <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-blue-200 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+                    <span class="sr-only">Open main menu</span>
+                    <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                    <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="md:hidden hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#about" class="text-white hover:bg-blue-700 block px-3 py-2 rounded-md text-base font-medium">About Us</a>
+                <a href="#services" class="text-white hover:bg-blue-700 block px-3 py-2 rounded-md text-base font-medium">Services</a>
+                <a href="#gallery" class="text-white hover:bg-blue-700 block px-3 py-2 rounded-md text-base font-medium">Gallery</a>
+                <a href="#order" class="text-white hover:bg-blue-700 block px-3 py-2 rounded-md text-base font-medium">Order Materials</a>
+                <a href="#testimonials" class="text-white hover:bg-blue-700 block px-3 py-2 rounded-md text-base font-medium">Testimonials</a>
+                <a href="#faq" class="text-white hover:bg-blue-700 block px-3 py-2 rounded-md text-base font-medium">FAQ</a>
+                <a href="#contact" class="text-white hover:bg-blue-700 block px-3 py-2 rounded-md text-base font-medium">Contact Us</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="bg-blue-700 text-white text-center py-20 px-4">
+        <div class="container mx-auto">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Strong Fences, Stronger Relationships.</h1>
+            <p class="text-xl md:text-2xl mb-8">Your trusted partner for robust fencing solutions in Salem, Tamil Nadu.</p>
+            <a href="#contact" class="bg-white text-blue-700 hover:bg-blue-100 font-bold py-3 px-8 rounded-full text-lg shadow-lg transition duration-300 ease-in-out">Get a Free Quote</a>
+        </div>
+    </section>
+
+    <section id="about" class="py-16 bg-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">About BOYS Fencing</h2>
+            <p class="text-lg text-gray-700 leading-relaxed max-w-3xl mx-auto">
+                With over <strong class="text-blue-600">15 years of dedicated experience</strong>, BOYS Fencing is a family-owned business proudly serving Salem and surrounding areas in Tamil Nadu. We specialize in providing high-quality, durable, and cost-effective fencing solutions tailored to your specific needs. Our commitment to craftsmanship and customer satisfaction has made us a trusted name in the industry.
+            </p>
+            <p class="text-lg text-gray-700 leading-relaxed max-w-3xl mx-auto mt-4">
+                From securing agricultural lands to establishing robust boundaries for commercial and residential properties, we ensure every project is completed with precision and reliability. Your property's safety and integrity are our top priority.
+            </p>
+        </div>
+    </section>
+
+    <section id="services" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8">Our Core Services</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <img src="https://via.placeholder.com/150/0000FF/FFFFFF?text=Chain+Link" alt="Twisted Chain-Link Fencing" class="mx-auto mb-4 rounded-full">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Twisted Chain-Link Fencing</h3>
+                    <p class="text-gray-700">Ideal for securing boundaries, agricultural fields, and sports grounds. Durable, flexible, and cost-effective solutions.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <img src="https://via.placeholder.com/150/008000/FFFFFF?text=Barbed+Wire" alt="Barbed Wire Fencing" class="mx-auto mb-4 rounded-full">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Barbed Wire Fencing</h3>
+                    <p class="text-gray-700">Robust security for high-risk areas, industrial sites, and large estates. Offers superior deterrence.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <img src="https://via.placeholder.com/150/FF0000/FFFFFF?text=Custom+Gate" alt="Custom Gate Installation" class="mx-auto mb-4 rounded-full">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Custom Gate Installation</h3>
+                    <p class="text-gray-700">Tailored gates for easy access and enhanced security. Designed to complement your fencing and property aesthetics.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery" class="py-16 bg-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8">Our Completed Projects</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div class="overflow-hidden rounded-lg shadow-md">
+                    <img src="https://via.placeholder.com/400x300?text=Project+1" alt="Project 1: Farm Fencing" class="w-full h-48 object-cover transform hover:scale-105 transition duration-300">
+                </div>
+                <div class="overflow-hidden rounded-lg shadow-md">
+                    <img src="https://via.placeholder.com/400x300?text=Project+2" alt="Project 2: Residential Gate" class="w-full h-48 object-cover transform hover:scale-105 transition duration-300">
+                </div>
+                <div class="overflow-hidden rounded-lg shadow-md">
+                    <img src="https://via.placeholder.com/400x300?text=Project+3" alt="Project 3: Industrial Boundary" class="w-full h-48 object-cover transform hover:scale-105 transition duration-300">
+                </div>
+                <div class="overflow-hidden rounded-lg shadow-md">
+                    <img src="https://via.placeholder.com/400x300?text=Project+4" alt="Project 4: School Playground" class="w-full h-48 object-cover transform hover:scale-105 transition duration-300">
+                </div>
+                <div class="overflow-hidden rounded-lg shadow-md">
+                    <img src="https://via.placeholder.com/400x300?text=Project+5" alt="Project 5: Custom Fence" class="w-full h-48 object-cover transform hover:scale-105 transition duration-300">
+                </div>
+                <div class="overflow-hidden rounded-lg shadow-md">
+                    <img src="https://via.placeholder.com/400x300?text=Project+6" alt="Project 6: Barbed Wire Install" class="w-full h-48 object-cover transform hover:scale-105 transition duration-300">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="order" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Place Your Material Order Inquiry</h2>
+            <p class="text-lg text-center text-gray-600 mb-12">Select your desired fencing materials and quantity. We will contact you to confirm and finalize your order.</p>
+
+            <form id="materialOrderForm" class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-md">
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Stones (Pillars)</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label for="stone_6ft_qty" class="block text-gray-700 text-sm font-bold mb-2">6 Feet Stones Quantity:</label>
+                            <input type="number" id="stone_6ft_qty" name="stone_6ft_qty" min="0" value="0" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        </div>
+                        <div>
+                            <label for="stone_7ft_qty" class="block text-gray-700 text-sm font-bold mb-2">7 Feet Stones Quantity:</label>
+                            <input type="number" id="stone_7ft_qty" name="stone_7ft_qty" min="0" value="0" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        </div>
+                        <div>
+                            <label for="stone_8ft_qty" class="block text-gray-700 text-sm font-bold mb-2">8 Feet Stones Quantity:</label>
+                            <input type="number" id="stone_8ft_qty" name="stone_8ft_qty" min="0" value="0" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Twisted Chain Link Fencing</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="chainlink_height" class="block text-gray-700 text-sm font-bold mb-2">Select Height (Feet):</label>
+                            <select id="chainlink_height" name="chainlink_height" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                <option value="">Select Height</option>
+                                <option value="4">4 Feet</option>
+                                <option value="5">5 Feet</option>
+                                <option value="6">6 Feet</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="chainlink_length" class="block text-gray-700 text-sm font-bold mb-2">Enter Length (Feet):</label>
+                            <input type="number" id="chainlink_length" name="chainlink_length" min="1" value="" placeholder="e.g., 100, 200" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Your Contact Details</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="order_name" class="block text-gray-700 text-sm font-bold mb-2">Your Name:</label>
+                            <input type="text" id="order_name" name="order_name" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        </div>
+                        <div>
+                            <label for="order_phone" class="block text-gray-700 text-sm font-bold mb-2">Your Phone (WhatsApp Preferred):</label>
+                            <input type="tel" id="order_phone" name="order_phone" required pattern="[0-9]{10}" title="Please enter a 10-digit phone number" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label for="order_message" class="block text-gray-700 text-sm font-bold mb-2">Additional Notes (Optional):</label>
+                        <textarea id="order_message" name="order_message" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Any specific requirements or delivery instructions?"></textarea>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-center">
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:shadow-outline transition duration-300 ease-in-out">
+                        Place Order Inquiry
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <section id="testimonials" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">What Our Clients Say</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-gray-50 p-6 rounded-lg shadow-md">
+                    <p class="text-lg text-gray-700 italic mb-4">"BOYS Fencing did an excellent job on our farm. The quality of the chain-link fence is superb, and the installation was quick and professional. Highly recommended!"</p>
+                    <p class="font-semibold text-gray-800">- Mr. R. Kumar, Local Farmer</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg shadow-md">
+                    <p class="text-lg text-gray-700 italic mb-4">"We needed a custom gate, and BOYS Fencing delivered beyond our expectations. Great communication and a sturdy, beautiful gate that perfectly fits our property."</p>
+                    <p class="font-semibold text-gray-800">- Mrs. S. Lakshmi, Homeowner</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg shadow-md">
+                    <p class="text-lg text-gray-700 italic mb-4">"Reliable service and top-notch materials. Our property feels much safer now. Thank you, BOYS Fencing!"</p>
+                    <p class="font-semibold text-gray-800">- K. Murali, Business Owner</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Frequently Asked Questions</h2>
+            <div class="max-w-3xl mx-auto">
+                <div class="bg-white p-6 rounded-lg shadow-md mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">What areas do you serve?</h3>
+                    <p class="text-gray-700">We primarily serve Salem and all surrounding areas in Tamil Nadu, India. Please contact us to confirm service availability in your specific location.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Do you provide installation services, or just materials?</h3>
+                    <p class="text-gray-700">We provide both high-quality fencing materials and professional installation services. You can order materials directly or request a full installation quote.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">How long does a typical fencing project take?</h3>
+                    <p class="text-gray-700">The duration varies depending on the size and complexity of the project. We provide an estimated timeline during your initial consultation and strive to complete projects efficiently without compromising quality.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">What kind of maintenance do your fences require?</h3>
+                    <p class="text-gray-700">Our fences are designed for durability and minimal maintenance. We use high-quality, weather-resistant materials. Regular cleaning and occasional checks for wear and tear are generally sufficient.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-16 bg-blue-700 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-8">Get in Touch with BOYS Fencing</h2>
+            <p class="text-lg mb-4">Have questions or need a custom fencing solution? Contact us today!</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">Direct Contact</h3>
+                    <p class="mb-2">Phone: <a href="tel:+919942735235" class="hover:underline">+91 9942735235</a></p>
+                    <p class="mb-2">Email: <a href="mailto:info@boysfencing.com" class="hover:underline">info@boysfencing.com</a></p>
+                    <p>Address: [Your Actual Location Address, e.g., Street Name, City, Salem, Tamil Nadu, India]</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">Quick Inquiry</h3>
+                    <form class="text-left max-w-md mx-auto">
+                        <div class="mb-4">
+                            <label for="contact_name" class="block text-sm font-bold mb-2">Name:</label>
+                            <input type="text" id="contact_name" name="name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="contact_email" class="block text-sm font-bold mb-2">Email:</label>
+                            <input type="email" id="contact_email" name="email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                        </div>
+                        <div class="mb-6">
+                            <label for="contact_message" class="block text-sm font-bold mb-2">Message:</label>
+                            <textarea id="contact_message" name="message" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea>
+                        </div>
+                        <button type="submit" class="bg-white text-blue-700 hover:bg-blue-100 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-800 text-gray-300 py-8 px-4">
+        <div class="container mx-auto text-center">
+            <p class="mb-4">&copy; 2025 BOYS Fencing. All rights reserved.</p>
+            <div class="mt-8 text-center text-gray-400">
+                <p class="mb-2">Find Us Here:</p>
+                <a href="https://www.google.com/maps/search/?api=1&query=BOYS+fencing%2C+Salem%2C+Tamil+Nadu%2C+India" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 underline">
+                    View BOYS Fencing on Google Maps
+                </a>
+                <p class="mt-2">Salem, Tamil Nadu, India</p>
+            </div>
+            <div class="flex justify-center space-x-4 mt-4">
+                <a href="#" class="text-gray-300 hover:text-white">Facebook</a>
+                <a href="#" class="text-gray-300 hover:text-white">Instagram</a>
+                </div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/91XXXXXXXXXX?text=Hello%20BOYS%20Fencing,%20I%20have%20an%20inquiry%20from%20your%20website." class="whatsapp-button" target="_blank" rel="noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.523-3.872-1.523-5.94 0-6.042 4.908-10.95 10.95-10.95 2.942 0 5.663 1.144 7.728 3.194s3.194 4.786 3.194 7.728c0 6.042-4.908 10.95-10.95 10.95h-.001c-1.879 0-3.7-.56-5.286-1.605l-6.164 1.687zm14.156-4.927c-.896-.445-5.607-2.78-5.741-2.839-.134-.059-.23-.089-.325.089s-.427.534-1.042 1.296c-.615.762-1.229.821-2.28.307s-4.329-3.323-5.011-7.058c-.683-3.735.311-5.786.618-6.136.307-.351.683-.445.961-.445h.412c.28.001.385.006.564.444.179.444.615 1.488.665 1.593.051.106.026.195-.025.308-.051.112-.325.395-.46.549s-.23.324-.134.549c.095.224.427.534.873 1.296.445.762.896 1.489 1.203 1.631.307.143.513.214.692.195.179-.02.564-.214.743-.445.179-.23.23-.179.427-.089.195.089.618.28.903.549.284.269.379.445.427.534s.075.178.026.444c-.05.266-.46.445-.896.669z"/></svg>
+    </a>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Mobile menu toggle
+            const mobileMenuButton = document.querySelector('[aria-controls="mobile-menu"]');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    const expanded = mobileMenuButton.getAttribute('aria-expanded') === 'true' || false;
+                    mobileMenuButton.setAttribute('aria-expanded', !expanded);
+                    mobileMenu.classList.toggle('hidden');
+                });
+
+                // Close mobile menu when a link is clicked
+                mobileMenu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenuButton.setAttribute('aria-expanded', 'false');
+                        mobileMenu.classList.add('hidden');
+                    });
+                });
+            }
+
+            // Material Order Form Submission (to WhatsApp)
+            const materialOrderForm = document.getElementById('materialOrderForm');
+
+            if (materialOrderForm) {
+                materialOrderForm.addEventListener('submit', function(event) {
+                    event.preventDefault(); // Prevent default form submission
+
+                    // Get form values
+                    const stone6ft = document.getElementById('stone_6ft_qty').value;
+                    const stone7ft = document.getElementById('stone_7ft_qty').value;
+                    const stone8ft = document.getElementById('stone_8ft_qty').value;
+                    const chainlinkHeight = document.getElementById('chainlink_height').value;
+                    const chainlinkLength = document.getElementById('chainlink_length').value;
+                    const orderName = document.getElementById('order_name').value;
+                    const orderPhone = document.getElementById('order_phone').value;
+                    const orderMessage = document.getElementById('order_message').value;
+
+                    // Company's fixed location for the message
+                    const companyLocationForMessage = "Salem, Tamil Nadu, India";
+
+                    // Construct the WhatsApp message
+                    let message = `Hello BOYS Fencing, I would like to place an order inquiry:\n\n`;
+                    message += `--- Material Order ---\n`;
+
+                    if (parseInt(stone6ft) > 0) message += `Stones (6 ft): ${stone6ft} Nos\n`;
+                    if (parseInt(stone7ft) > 0) message += `Stones (7 ft): ${stone7ft} Nos\n`;
+                    if (parseInt(stone8ft) > 0) message += `Stones (8 ft): ${stone8ft} Nos\n`;
+
+                    if (chainlinkHeight && chainlinkLength) {
+                        message += `Twisted Chain Link: ${chainlinkHeight} ft height, ${chainlinkLength} feet length\n`;
+                    } else if (chainlinkHeight) {
+                        message += `Twisted Chain Link Height selected: ${chainlinkHeight} ft (Please specify length in feet)\n`;
+                    } else if (chainlinkLength) {
+                        message += `Twisted Chain Link Length entered: ${chainlinkLength} feet (Please specify height)\n`;
+                    }
+
+                    if (orderMessage) {
+                        message += `\n--- Additional Notes ---\n${orderMessage}\n`;
+                    }
+
+                    message += `\n--- Customer Details ---\n`;
+                    message += `Name: ${orderName}\n`;
+                    message += `Phone: ${orderPhone}\n`;
+                    message += `Customer Location (Approx.): [Please ask customer for their exact delivery location]\n`; // Prompt for user's location
+                    message += `Company Location: ${companyLocationForMessage}\n`; // Add company's location
+
+                    // Encode the message for a URL
+                    const encodedMessage = encodeURIComponent(message);
+
+                    // BOYS Fencing's WhatsApp number (REPLACE THIS WITH YOUR ACTUAL NUMBER)
+                    const whatsappNumber = '91XXXXXXXXXX'; // **E.g., 919942735235**
+
+                    // Construct the WhatsApp API URL
+                    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+                    // Open WhatsApp
+                    window.open(whatsappUrl, '_blank');
+
+                    // Optional: Provide feedback to the user
+                    alert('Your order inquiry has been sent to WhatsApp! We will contact you shortly.');
+
+                    // Clear the form after submission
+                    materialOrderForm.reset();
+                });
+            }
+
+            // Basic Contact Form (if you choose to send to email, this needs a backend)
+            // For now, it will just show an alert
+            const contactForm = document.querySelector('#contact form');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    alert('Thank you for your message! We will get back to you soon. (Note: This form needs a backend to send emails.)');
+                    contactForm.reset();
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
