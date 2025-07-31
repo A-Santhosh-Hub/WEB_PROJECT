@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SANTHOSH - Futuristic Portfolio</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Custom Styles & Animations -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            color: #e5e7eb;
+            overflow-x: hidden;
+        }
+        
+        /* --- Background Styles --- */
+        .gradient-bg {
+            background: linear-gradient(-45deg, #000000, #0a041a, #000000, #1a0404);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+        .image-bg {
+            background-image: url('https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- Custom Neon Glow Effect --- */
+        .neon-glow {
+            box-shadow: 0 0 5px #3b82f6, 0 0 10px #3b82f6, 0 0 15px #3b82f6, 0 0 20px #3b82f6;
+        }
+        .neon-text {
+            text-shadow: 0 0 3px rgba(59, 130, 246, 0.7), 0 0 5px rgba(59, 130, 246, 0.5);
+        }
+
+        /* --- Navigation Bar Styling --- */
+        #navbar {
+            transition: background-color 0.3s ease-in-out;
+        }
+        #navbar.scrolled {
+            background-color: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+        }
+        
+        /* --- Mobile Nav Styling --- */
+        #mobile-nav {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        #mobile-nav.open {
+            transform: translateX(0);
+        }
+
+        /* --- Project Card Styling --- */
+        .project-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        .project-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4), 0 0 30px rgba(59, 130, 246, 0.2);
+        }
+        .project-card .overlay {
+            transition: opacity 0.3s ease;
+        }
+        .project-card:hover .overlay {
+            opacity: 1;
+        }
+
+        /* --- Scroll to Top Button Styling --- */
+        #scrollTopBtn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+            transform: translateY(100px);
+            z-index: 50;
+        }
+        #scrollTopBtn.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Modal (Iframe Viewer) Styling --- */
+        #projectModal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            position: relative;
+            margin: 5% auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 1200px;
+            height: 85%;
+            background-color: #111827;
+            border: 1px solid #3b82f6;
+            border-radius: 1rem;
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.3);
+        }
+        .modal-body {
+            height: calc(100% - 70px); /* Adjust based on header height */
+        }
+        #projectIframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 0.5rem;
+        }
+        .modal-control-btn {
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+        .modal-control-btn:hover {
+            transform: scale(1.1);
+            color: #3b82f6;
+        }
+        
+        /* --- Scroll Reveal Animation --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="gradient-bg">
+
+    <!-- Navigation Bar -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold neon-text">SANTHOSH</a>
+            <!-- Desktop Nav -->
+            <div class="hidden md:flex space-x-8">
+                <a href="#about" class="hover:text-blue-400 transition-colors">About</a>
+                <a href="#skills" class="hover:text-blue-400 transition-colors">Skills</a>
+                <a href="#projects" class="hover:text-blue-400 transition-colors">Projects</a>
+                <a href="#contact" class="hover:text-blue-400 transition-colors">Contact</a>
+            </div>
+            <!-- Mobile Nav Button -->
+            <div class="md:hidden">
+                <button id="mobile-nav-btn" class="focus:outline-none">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Nav Menu -->
+    <div id="mobile-nav" class="fixed top-0 right-0 h-full w-full bg-black/90 z-40 flex flex-col items-center justify-center space-y-8 md:hidden">
+        <a href="#about" class="text-3xl mobile-nav-link">About</a>
+        <a href="#skills" class="text-3xl mobile-nav-link">Skills</a>
+        <a href="#projects" class="text-3xl mobile-nav-link">Projects</a>
+        <a href="#contact" class="text-3xl mobile-nav-link">Contact</a>
+    </div>
+
+    <!-- Header & Hero Section -->
+    <header class="min-h-screen flex flex-col justify-center items-center text-center p-4 pt-20">
+        <h1 class="text-5xl md:text-7xl font-bold tracking-wider uppercase text-white">SANTHOSH</h1>
+        <p class="text-lg md:text-2xl mt-4 text-blue-400 neon-text">
+            <span id="typed-text"></span>
+        </p>
+        <div class="mt-8 flex space-x-6">
+            <a href="https://github.com/A-Santhosh-Hub" target="_blank" class="text-gray-400 hover:text-blue-400 transition-colors duration-300">
+                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.168 6.839 9.492.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.378.203 2.398.1 2.65.64.7 1.03 1.595 1.03 2.688 0 3.848-2.338 4.695-4.566 4.942.359.308.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd" /></svg>
+            </a>
+        </div>
+        <div class="absolute bottom-10 animate-bounce">
+            <a href="#about">
+                <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-16 space-y-24">
+        <!-- Main content sections (About, Skills, Projects, Contact) remain the same -->
+        <section id="about" class="reveal text-center max-w-3xl mx-auto">
+            <h2 class="text-4xl font-bold mb-6 neon-text">About Me</h2>
+            <p class="text-lg text-gray-300 leading-relaxed">
+                Hi, I'm Santhosh, a passionate and creative developer with a love for building beautiful, high-performance web experiences. I thrive on turning complex problems into elegant solutions and am constantly exploring new technologies to push the boundaries of what's possible on the web.
+            </p>
+        </section>
+
+        <section id="skills" class="reveal">
+            <h2 class="text-4xl font-bold text-center mb-12 neon-text">My Toolkit</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 max-w-4xl mx-auto">
+                <div class="flex flex-col items-center p-4 bg-gray-900/50 rounded-lg transition-transform hover:scale-110"><img src="https://placehold.co/64x64/3b82f6/ffffff?text=HTML5" class="h-16 w-16 mb-2 rounded-full" alt="HTML5 Icon"><span class="font-semibold">HTML5</span></div>
+                <div class="flex flex-col items-center p-4 bg-gray-900/50 rounded-lg transition-transform hover:scale-110"><img src="https://placehold.co/64x64/3b82f6/ffffff?text=CSS3" class="h-16 w-16 mb-2 rounded-full" alt="CSS3 Icon"><span class="font-semibold">CSS3</span></div>
+                <div class="flex flex-col items-center p-4 bg-gray-900/50 rounded-lg transition-transform hover:scale-110"><img src="https://placehold.co/64x64/3b82f6/ffffff?text=JS" class="h-16 w-16 mb-2 rounded-full" alt="JavaScript Icon"><span class="font-semibold">JavaScript</span></div>
+                <div class="flex flex-col items-center p-4 bg-gray-900/50 rounded-lg transition-transform hover:scale-110"><img src="https://placehold.co/64x64/3b82f6/ffffff?text=3D" class="h-16 w-16 mb-2 rounded-full" alt="3D Design Icon"><span class="font-semibold">3D Design</span></div>
+                <div class="flex flex-col items-center p-4 bg-gray-900/50 rounded-lg transition-transform hover:scale-110"><img src="https://placehold.co/64x64/3b82f6/ffffff?text=React" class="h-16 w-16 mb-2 rounded-full" alt="React Icon"><span class="font-semibold">React</span></div>
+            </div>
+        </section>
+
+        <section id="projects" class="reveal">
+            <h2 class="text-4xl font-bold text-center mb-12 neon-text">My Creations</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <div class="project-card bg-gray-900/50 rounded-lg overflow-hidden cursor-pointer" data-url="https://santhosh2025.neocities.org/New%20Project/Main" data-title="Photo Album Web Page"><div class="relative"><img src="https://placehold.co/600x400/0a041a/3b82f6?text=Photo+Album" alt="Project 1" class="w-full h-48 object-cover"><div class="overlay absolute inset-0 bg-black/50 flex items-center justify-center opacity-0"><span class="text-white text-lg font-bold">View Project</span></div></div><div class="p-6"><h3 class="text-xl font-bold text-white">Photo Album</h3><p class="text-gray-400 mt-2">A visually appealing gallery for showcasing photos.</p></div></div>
+                <div class="project-card bg-gray-900/50 rounded-lg overflow-hidden cursor-pointer" data-url="https://santhosh2025.neocities.org/profile/" data-title="Personal Profile Page"><div class="relative"><img src="https://placehold.co/600x400/0a041a/3b82f6?text=Profile+Page" alt="Project 2" class="w-full h-48 object-cover"><div class="overlay absolute inset-0 bg-black/50 flex items-center justify-center opacity-0"><span class="text-white text-lg font-bold">View Project</span></div></div><div class="p-6"><h3 class="text-xl font-bold text-white">Profile Page</h3><p class="text-gray-400 mt-2">A personal landing page with contact information.</p></div></div>
+                <div class="project-card bg-gray-900/50 rounded-lg overflow-hidden cursor-pointer" data-url="https://santhosh2025.neocities.org/Blender%203D/" data-title="My Blender 3D Models Website"><div class="relative"><img src="https://placehold.co/600x400/0a041a/3b82f6?text=My+Blender+3D+Models+Website" alt="Project 3" class="w-full h-48 object-cover"><div class="overlay absolute inset-0 bg-black/50 flex items-center justify-center opacity-0"><span class="text-white text-lg font-bold">View Project</span></div></div><div class="p-6"><h3 class="text-xl font-bold text-white">3D-Blender Project</h3><p class="text-gray-400 mt-2">3D Models.</p></div></div>
+                <div class="project-card bg-gray-900/50 rounded-lg overflow-hidden cursor-pointer" data-url="https://example.com" data-title="Future Project"><div class="relative"><img src="https://placehold.co/600x400/0a041a/3b82f6?text=Coming+Soon" alt="Project 3" class="w-full h-48 object-cover"><div class="overlay absolute inset-0 bg-black/50 flex items-center justify-center opacity-0"><span class="text-white text-lg font-bold">View Project</span></div></div><div class="p-6"><h3 class="text-xl font-bold text-white">Future Project</h3><p class="text-gray-400 mt-2">A placeholder for my next exciting creation.</p></div></div>
+
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            </div>
+        </section>
+
+        <section id="contact" class="reveal text-center max-w-3xl mx-auto">
+            <h2 class="text-4xl font-bold mb-6 neon-text">Get In Touch</h2>
+            <p class="text-lg text-gray-300 mb-8">I'm always open to discussing new projects, creative ideas, or opportunities to be part of an ambitious vision.</p>
+            <a href="mailto:arussanthosh@gmail.com" class="inline-block bg-blue-600 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-blue-500 transition-colors duration-300 neon-glow">Say Hello</a>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-8 border-t border-gray-800/50">
+        <div class="flex justify-center items-center space-x-4 mb-4">
+            <span>Gradient</span>
+            <label for="bg-toggle" class="flex items-center cursor-pointer">
+                <div class="relative">
+                    <input type="checkbox" id="bg-toggle" class="sr-only">
+                    <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                    <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                </div>
+            </label>
+            <span>Image</span>
+        </div>
+        <p>&copy; 2025 SANTHOSH - A. All rights reserved.</p>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollTopBtn" class="bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-500 neon-glow">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+    </button>
+
+    <!-- Project Modal (Iframe Viewer) -->
+    <div id="projectModal">
+        <div class="modal-content flex flex-col">
+            <div class="flex justify-between items-center mb-4 flex-wrap">
+                <h3 id="modalTitle" class="text-xl md:text-2xl font-bold text-white"></h3>
+                <div class="flex items-center space-x-4">
+                    <!-- Full Screen Button -->
+                    <button id="fullscreenBtn" title="Full Screen" class="modal-control-btn text-gray-400"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 0h-4m4 0l-5-5"></path></svg></button>
+                    <!-- Open in New Tab Button -->
+                    <a id="newTabBtn" href="#" target="_blank" title="Open in New Tab" class="modal-control-btn text-gray-400"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg></a>
+                    <!-- Close Button -->
+                    <button id="closeModalBtn" title="Close" class="modal-control-btn text-gray-400 text-4xl leading-none">&times;</button>
+                </div>
+            </div>
+            <div class="modal-body flex-grow">
+                <iframe id="projectIframe" src="" title="Project Preview" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Typed.js for animated text -->
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+
+    <!-- Custom JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- Typed.js Animation ---
+            new Typed('#typed-text', {
+                strings: ['Web Developer', 'UI/UX Designer', '3D Artist', 'Creative Coder', 'Gamer'],
+                typeSpeed: 50, backSpeed: 30, backDelay: 1500, loop: true, smartBackspace: true
+            });
+
+            // --- Navbar Scroll Effect ---
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // --- Mobile Navigation ---
+            const mobileNavBtn = document.getElementById('mobile-nav-btn');
+            const mobileNav = document.getElementById('mobile-nav');
+            const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+            mobileNavBtn.addEventListener('click', () => mobileNav.classList.toggle('open'));
+            mobileNavLinks.forEach(link => link.addEventListener('click', () => mobileNav.classList.remove('open')));
+
+            // --- Modal Logic ---
+            const modal = document.getElementById('projectModal');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const projectIframe = document.getElementById('projectIframe');
+            const modalTitle = document.getElementById('modalTitle');
+            const projectCards = document.querySelectorAll('.project-card');
+            const fullscreenBtn = document.getElementById('fullscreenBtn');
+            const newTabBtn = document.getElementById('newTabBtn');
+
+            projectCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const url = card.dataset.url;
+                    const title = card.dataset.title;
+                    projectIframe.src = url;
+                    newTabBtn.href = url;
+                    modalTitle.textContent = title;
+                    modal.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                });
+            });
+
+            const closeModal = () => {
+                modal.style.display = 'none';
+                projectIframe.src = '';
+                document.body.style.overflow = 'auto';
+            };
+
+            closeModalBtn.addEventListener('click', closeModal);
+            fullscreenBtn.addEventListener('click', () => projectIframe.requestFullscreen().catch(err => console.error(err)));
+            window.addEventListener('click', (event) => { if (event.target == modal) closeModal(); });
+            window.addEventListener('keydown', (event) => { if (event.key === 'Escape' && modal.style.display === 'flex') closeModal(); });
+
+            // --- Scroll to Top Button ---
+            const scrollTopBtn = document.getElementById('scrollTopBtn');
+            window.onscroll = function() {
+                if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                    scrollTopBtn.classList.add('show');
+                } else {
+                    scrollTopBtn.classList.remove('show');
+                }
+            };
+            scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+            // --- Scroll Reveal Animation ---
+            const revealElements = document.querySelectorAll('.reveal');
+            const revealOnScroll = () => {
+                const windowHeight = window.innerHeight;
+                revealElements.forEach(el => {
+                    const elementTop = el.getBoundingClientRect().top;
+                    if (elementTop < windowHeight - 100) el.classList.add('active');
+                });
+            };
+            window.addEventListener('scroll', revealOnScroll);
+            revealOnScroll();
+
+            // --- Background Toggle ---
+            const bgToggle = document.getElementById('bg-toggle');
+            const body = document.body;
+            bgToggle.addEventListener('change', () => {
+                body.classList.toggle('gradient-bg');
+                body.classList.toggle('image-bg');
+            });
+            // Ensure correct initial state
+            if (!body.classList.contains('gradient-bg')) {
+                body.classList.add('gradient-bg');
+            }
+        });
+    </script>
+</body>
+</html>
