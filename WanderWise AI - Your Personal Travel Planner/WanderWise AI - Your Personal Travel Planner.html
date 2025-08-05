@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WanderWise AI - Your Personal Travel Planner</title>
+    <link rel="icon" type="image/png" href="ico.png" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .hero-bg {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://placehold.co/1600x900/000000/FFFFFF?text=Dream+Destination');
+            background-size: cover;
+            background-position: center;
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #34d399, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-gray-800">
+                <span class="gradient-text">WanderWise AI</span>
+            </div>
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#features" class="text-gray-600 hover:text-blue-500 transition duration-300">Features</a>
+                <a href="#how-it-works" class="text-gray-600 hover:text-blue-500 transition duration-300">How It Works</a>
+                <a href="#pricing" class="text-gray-600 hover:text-blue-500 transition duration-300">Pricing</a>
+                <a href="#" class="bg-blue-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-blue-600 transition duration-300">Sign Up</a>
+            </div>
+            <div class="md:hidden">
+                <button id="menu-btn" class="text-gray-600 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="#features" class="block py-2 text-gray-600 hover:text-blue-500">Features</a>
+            <a href="#how-it-works" class="block py-2 text-gray-600 hover:text-blue-500">How It Works</a>
+            <a href="#pricing" class="block py-2 text-gray-600 hover:text-blue-500">Pricing</a>
+            <a href="#" class="block mt-2 bg-blue-500 text-white text-center font-semibold px-5 py-2 rounded-lg hover:bg-blue-600">Sign Up</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-bg text-white py-20 md:py-32">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-4">Craft Your Perfect Trip in Seconds</h1>
+                <p class="text-lg md:text-xl text-gray-200 mb-8 max-w-3xl mx-auto">Stop planning, start exploring. Our AI generates personalized travel itineraries based on your interests, budget, and style.</p>
+                
+                <!-- AI Itinerary Generator Form -->
+                <div class="bg-white/90 backdrop-blur-sm p-6 md:p-8 rounded-xl shadow-2xl max-w-4xl mx-auto text-gray-800">
+                    <form id="itinerary-form" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                        <div class="text-left">
+                            <label for="destination" class="block text-sm font-medium text-gray-700 mb-1">Destination</label>
+                            <input type="text" id="destination" placeholder="e.g., Paris, France" class="w-full px-4 py-3 rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500 transition">
+                        </div>
+                        <div class="text-left">
+                            <label for="duration" class="block text-sm font-medium text-gray-700 mb-1">Duration (days)</label>
+                            <input type="number" id="duration" placeholder="e.g., 7" class="w-full px-4 py-3 rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500 transition">
+                        </div>
+                        <div class="text-left">
+                            <label for="interests" class="block text-sm font-medium text-gray-700 mb-1">Interests</label>
+                            <input type="text" id="interests" placeholder="e.g., Art, Food, History" class="w-full px-4 py-3 rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500 transition">
+                        </div>
+                        <button type="submit" class="w-full bg-emerald-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-emerald-600 transition duration-300 shadow-md text-lg">Generate Itinerary</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Itinerary Display Section -->
+        <section id="itinerary-output" class="py-12 md:py-20 hidden">
+            <div class="container mx-auto px-6">
+                <div id="loader" class="text-center">
+                    <div class="flex justify-center items-center">
+                        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+                    </div>
+                    <p class="mt-4 text-lg text-gray-600">Our AI is crafting your personalized journey...</p>
+                </div>
+                <div id="result" class="hidden">
+                    <!-- Dynamic content will be injected here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section id="how-it-works" class="py-12 md:py-20 bg-white">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Get Started in 3 Simple Steps</h2>
+                <p class="text-gray-600 mb-12 max-w-2xl mx-auto">From a simple idea to a detailed plan, WanderWise AI makes travel planning effortless and fun.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+                    <!-- Step 1 -->
+                    <div class="flex flex-col items-center">
+                        <div class="bg-blue-100 text-blue-500 rounded-full p-5 mb-4">
+                            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">1. Tell Us Your Dream</h3>
+                        <p class="text-gray-500">Enter your destination, how long you're staying, and what you love to do.</p>
+                    </div>
+                    <!-- Step 2 -->
+                    <div class="flex flex-col items-center">
+                        <div class="bg-emerald-100 text-emerald-500 rounded-full p-5 mb-4">
+                           <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">2. AI Magic Happens</h3>
+                        <p class="text-gray-500">Our smart algorithm analyzes millions of data points to build a unique plan just for you.</p>
+                    </div>
+                    <!-- Step 3 -->
+                    <div class="flex flex-col items-center">
+                        <div class="bg-purple-100 text-purple-500 rounded-full p-5 mb-4">
+                            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">3. Explore with Confidence</h3>
+                        <p class="text-gray-500">Receive a detailed, day-by-day itinerary with maps, suggestions, and booking links.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Features Section -->
+        <section id="features" class="py-12 md:py-20 bg-gray-50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold">Why Choose WanderWise AI?</h2>
+                    <p class="text-gray-600 mt-4 max-w-2xl mx-auto">We go beyond simple suggestions to create a truly seamless travel experience.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Feature 1 -->
+                    <div class="bg-white p-8 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+                        <div class="bg-blue-500 text-white rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Hyper-Personalization</h3>
+                        <p class="text-gray-500">Plans adapt to your travel style, from packed adventures to leisurely strolls.</p>
+                    </div>
+                    <!-- Feature 2 -->
+                    <div class="bg-white p-8 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+                        <div class="bg-emerald-500 text-white rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Save Hours of Planning</h3>
+                        <p class="text-gray-500">Go from zero to a full itinerary in minutes, not days. More time for dreaming about your trip.</p>
+                    </div>
+                    <!-- Feature 3 -->
+                    <div class="bg-white p-8 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+                        <div class="bg-purple-500 text-white rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13V7m6 13l5.447-2.724A1 1 0 0021 16.382V5.618a1 1 0 00-1.447-.894L15 7m0 13V7"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Real-Time Adaptability</h3>
+                        <p class="text-gray-500">Change of plans? Our AI can regenerate your itinerary on the fly based on new inputs.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section id="pricing" class="py-12 md:py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold">Simple, Transparent Pricing</h2>
+                    <p class="text-gray-600 mt-4 max-w-2xl mx-auto">Choose the plan that's right for your next adventure.</p>
+                </div>
+                <div class="flex flex-col lg:flex-row justify-center items-center gap-8">
+                    <!-- Basic Plan -->
+                    <div class="w-full max-w-md bg-gray-50 rounded-xl p-8 border border-gray-200">
+                        <h3 class="text-2xl font-semibold text-center">Explorer</h3>
+                        <p class="text-center text-gray-500 mt-2">Perfect for getting started</p>
+                        <p class="text-center text-5xl font-bold my-6">$0<span class="text-lg font-medium text-gray-500">/forever</span></p>
+                        <ul class="space-y-4 text-gray-600">
+                            <li class="flex items-center"><span class="text-emerald-500 mr-3">✔</span> 3 AI Itineraries per month</li>
+                            <li class="flex items-center"><span class="text-emerald-500 mr-3">✔</span> Standard personalization</li>
+                            <li class="flex items-center"><span class="text-emerald-500 mr-3">✔</span> Save & share plans</li>
+                        </ul>
+                        <button class="w-full mt-8 py-3 px-6 bg-gray-200 text-gray-700 font-semibold rounded-lg hover:bg-gray-300 transition">Get Started</button>
+                    </div>
+                    <!-- Pro Plan -->
+                    <div class="w-full max-w-md bg-blue-500 text-white rounded-xl p-8 shadow-2xl scale-105">
+                        <p class="text-center font-semibold bg-white/20 rounded-full w-fit mx-auto px-3 py-1 text-sm">Most Popular</p>
+                        <h3 class="text-2xl font-semibold text-center mt-4">Globetrotter</h3>
+                        <p class="text-center text-blue-200 mt-2">For the serious traveler</p>
+                        <p class="text-center text-5xl font-bold my-6">$9<span class="text-lg font-medium text-blue-200">/month</span></p>
+                        <ul class="space-y-4 text-blue-100">
+                            <li class="flex items-center"><span class="font-bold mr-3">✔</span> Unlimited AI Itineraries</li>
+                            <li class="flex items-center"><span class="font-bold mr-3">✔</span> Advanced personalization</li>
+                            <li class="flex items-center"><span class="font-bold mr-3">✔</span> Real-time flight & hotel info</li>
+                            <li class="flex items-center"><span class="font-bold mr-3">✔</span> Offline map access</li>
+                        </ul>
+                        <button class="w-full mt-8 py-3 px-6 bg-white text-blue-500 font-bold rounded-lg hover:bg-blue-100 transition">Go Pro</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto px-6 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">WanderWise AI</h3>
+                    <p class="text-gray-400">AI-powered travel planning for the modern explorer.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#features" class="text-gray-400 hover:text-white">Features</a></li>
+                        <li><a href="#pricing" class="text-gray-400 hover:text-white">Pricing</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Legal</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" /></svg></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.71v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" /></svg></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.024.048-1.378.06-3.808.06s-2.784-.013-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 016.08 2.525c.636-.247 1.363-.416 2.427-.465C9.53 2.013 9.884 2 12.315 2zM12 0C9.58 0 9.22.01 8.134.059 7.022.107 6.08.282 5.158.635a6.558 6.558 0 00-2.298 1.595A6.558 6.558 0 001.265 5.158C.911 6.08.736 7.022.688 8.134.64 9.22.628 9.58.628 12s.013 2.78.06 3.866c.049 1.112.224 2.054.577 2.976a6.558 6.558 0 001.595 2.298 6.558 6.558 0 002.298 1.595c.922.354 1.864.529 2.976.577 1.087.048 1.446.06 3.866.06s2.78-.013 3.866-.06c1.112-.049 2.054-.224 2.976-.577a6.558 6.558 0 002.298-1.595 6.558 6.558 0 001.595-2.298c.354-.922.529-1.864.577-2.976.048-1.087.06-1.446.06-3.866s-.013-2.78-.06-3.866c-.049-1.112-.224-2.054-.577-2.976A6.558 6.558 0 0018.842 2.263 6.558 6.558 0 0016.544.668c-.922-.354-1.864-.529-2.976-.577C12.479.01 12.12 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.88 1.44 1.44 0 000-2.88z" clip-rule="evenodd" /></svg></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 WanderWise AI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+        // --- Mobile Menu Toggle ---
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // --- Mock AI Itinerary Generator ---
+        const form = document.getElementById('itinerary-form');
+        const outputSection = document.getElementById('itinerary-output');
+        const loader = document.getElementById('loader');
+        const resultContainer = document.getElementById('result');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent actual form submission
+
+            // Get user inputs
+            const destination = document.getElementById('destination').value || 'your destination';
+            const duration = document.getElementById('duration').value || 'a few';
+            const interests = document.getElementById('interests').value || 'amazing things';
+
+            // Show the output section and loader
+            outputSection.classList.remove('hidden');
+            loader.style.display = 'block';
+            resultContainer.classList.add('hidden');
+            
+            // Scroll to the output section
+            outputSection.scrollIntoView({ behavior: 'smooth' });
+
+            // Simulate AI processing time
+            setTimeout(() => {
+                // Hide loader and show result
+                loader.style.display = 'none';
+                resultContainer.innerHTML = generateMockItinerary(destination, duration, interests);
+                resultContainer.classList.remove('hidden');
+            }, 2500); // 2.5 second delay
+        });
+
+        // --- Function to generate the mock content ---
+        function generateMockItinerary(destination, duration, interests) {
+            // This is a template. A real app would get this data from an AI API.
+            return `
+                <div class="bg-white p-8 rounded-xl shadow-lg max-w-5xl mx-auto">
+                    <h2 class="text-3xl font-bold text-center mb-2">Your <span class="gradient-text">${duration}-Day Trip to ${destination}</span></h2>
+                    <p class="text-center text-gray-500 mb-8">A personalized plan focusing on: ${interests}.</p>
+
+                    <div class="space-y-6">
+                        <!-- Day 1 -->
+                        <div>
+                            <h3 class="text-xl font-bold text-blue-600 border-b-2 border-blue-100 pb-2 mb-3">Day 1: Arrival & Exploration</h3>
+                            <ul class="list-disc list-inside text-gray-700 space-y-2">
+                                <li><strong>Morning:</strong> Arrive at the main airport, check into your hotel, and grab a coffee at a highly-rated local cafe.</li>
+                                <li><strong>Afternoon:</strong> Begin your journey with a walking tour of the historic city center, focusing on key landmarks.</li>
+                                <li><strong>Evening:</strong> Enjoy a welcome dinner at a restaurant known for its authentic local cuisine.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Day 2 -->
+                        <div>
+                            <h3 class="text-xl font-bold text-blue-600 border-b-2 border-blue-100 pb-2 mb-3">Day 2: Cultural Immersion (${interests.split(',')[0] || 'Art'})</h3>
+                            <ul class="list-disc list-inside text-gray-700 space-y-2">
+                                <li><strong>Morning:</strong> Visit the National Museum, home to priceless artifacts and exhibits related to your interests.</li>
+                                <li><strong>Afternoon:</strong> Explore the bohemian arts district, browsing galleries and street art.</li>
+                                <li><strong>Evening:</strong> Attend a local cultural performance or a live music show.</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Day 3 -->
+                        <div>
+                            <h3 class="text-xl font-bold text-blue-600 border-b-2 border-blue-100 pb-2 mb-3">Day 3: Adventure & Views</h3>
+                            <ul class="list-disc list-inside text-gray-700 space-y-2">
+                                <li><strong>Morning:</strong> Take a day trip to a nearby natural wonder for a scenic hike.</li>
+                                <li><strong>Afternoon:</strong> Enjoy a picnic with panoramic views of the landscape.</li>
+                                <li><strong>Evening:</strong> Return to the city and relax with a casual dinner.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="text-center mt-8">
+                        <button class="bg-blue-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-600 transition">Upgrade to Unlock Full Itinerary & Bookings</button>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
