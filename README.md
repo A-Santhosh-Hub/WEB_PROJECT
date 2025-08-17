@@ -1,6 +1,6 @@
 # WEB_PROJECT
 1. TextWriter ❮/❯ HTML --- ( https://santhosh2024.neocities.org/HTML/in )![image alt](https://github.com/A-Santhosh-Hub/WEB_PROJECT/blob/main/img/projects%20screenshot/Screenshot%202025-08-15%20120253.png )
-2. Stone_Calculator  ---- ( https://santhosh2024.neocities.org/Project's/Stone/ )![image alt]( )
+2. Stone_Calculator  ---- ( https://santhosh2024.neocities.org/Project's/Stone/ )![image alt](https://github.com/A-Santhosh-Hub/WEB_PROJECT/blob/main/STONE_Calculator/Stone.png )
 3. 2025 Online Medical Shop  ---- ( https://santhosh2025.neocities.org/Online%20Medical%20Shop/in )![image alt]( )
 4. Loan EMI & Interest Planner – Advanced Financial Estimator Tool ---- ( https://santhosh2025.neocities.org/EMI%20Tool/in )![image alt]( )
 5. Insta --- ( https://santhosh2025.neocities.org/Insta/in )![image alt]( )
