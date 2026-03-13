@@ -370,7 +370,8 @@
                             <option value="expense">Expense</option>
                             <option value="lent">Lent</option>
                             <option value="borrowed">Borrowed</option>
-                            <option value="savings">Savings</option>
+                            <option value="savings">Savings (Deposit)</option>
+                            <option value="withdraw_savings">Savings (Withdraw)</option>
                         </select>
                     </div>
                 </div>
@@ -633,6 +634,7 @@
                         <option value="lent">Lent</option>
                         <option value="borrowed">Borrowed</option>
                         <option value="savings">Transfer to Savings</option>
+                        <option value="withdraw_savings">Withdraw from Savings</option>
                     </select>
                 </div>
                 <div>
@@ -746,6 +748,7 @@
         const app = {
             workspaces: [],
             activeWorkspaceId: null,
+            editingWorkspaceId: null,
             data: null,
             settings: { darkMode: false },
             currentView: 'dashboard',
@@ -884,6 +887,7 @@
             },
 
             openWorkspaceModal() {
+                this.editingWorkspaceId = null;
                 this.renderWorkspaces();
                 this.openModal('modal-workspace');
             },
@@ -892,21 +896,40 @@
                 let html = '';
                 this.workspaces.forEach(ws => {
                     const isActive = ws.id === this.activeWorkspaceId;
-                    html += `
-                        <div class="flex items-center justify-between p-3 rounded-xl border ${isActive ? 'border-primary bg-indigo-50 dark:bg-indigo-900/30' : 'border-slate-200 dark:border-darkBorder hover:bg-slate-50 dark:hover:bg-slate-800/50'} transition-colors cursor-pointer mb-2" onclick="app.switchWorkspace('${ws.id}')">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full ${isActive ? 'bg-primary text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-500'} flex items-center justify-center">
-                                    <i class="ph-fill ph-wallet"></i>
-                                </div>
-                                <span class="font-medium ${isActive ? 'text-primary' : ''}">${ws.name}</span>
+                    const isEditing = ws.id === this.editingWorkspaceId;
+                    
+                    if (isEditing) {
+                        html += `
+                            <div class="flex items-center justify-between p-3 rounded-xl border border-primary bg-indigo-50 dark:bg-indigo-900/30 transition-colors mb-2">
+                                <form onsubmit="app.saveWorkspaceNameInline(event, '${ws.id}')" class="flex gap-2 w-full">
+                                    <input type="text" id="inline-rename-${ws.id}" value="${ws.name}" required class="flex-1 px-2 py-1 text-sm rounded-lg border border-slate-200 dark:border-darkBorder bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-primary/50 text-slate-800 dark:text-slate-100">
+                                    <button type="button" onclick="app.cancelRenameInline()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1"><i class="ph ph-x text-lg"></i></button>
+                                    <button type="submit" class="text-emerald-500 hover:text-emerald-600 p-1"><i class="ph ph-check text-xl"></i></button>
+                                </form>
                             </div>
-                            ${!isActive && this.workspaces.length > 1 ? `
-                                <button onclick="event.stopPropagation(); app.deleteWorkspace('${ws.id}')" class="text-slate-400 hover:text-red-500 p-1 rounded transition-colors">
-                                    <i class="ph ph-trash text-lg"></i>
-                                </button>
-                            ` : isActive ? `<i class="ph ph-check-circle text-primary text-xl"></i>` : ''}
-                        </div>
-                    `;
+                        `;
+                    } else {
+                        html += `
+                            <div class="flex items-center justify-between p-3 rounded-xl border ${isActive ? 'border-primary bg-indigo-50 dark:bg-indigo-900/30' : 'border-slate-200 dark:border-darkBorder hover:bg-slate-50 dark:hover:bg-slate-800/50'} transition-colors cursor-pointer mb-2" onclick="app.switchWorkspace('${ws.id}')">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full ${isActive ? 'bg-primary text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-500'} flex items-center justify-center">
+                                        <i class="ph-fill ph-wallet"></i>
+                                    </div>
+                                    <span class="font-medium ${isActive ? 'text-primary' : ''}">${ws.name}</span>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <button onclick="event.stopPropagation(); app.startRenameInline('${ws.id}')" class="text-slate-400 hover:text-blue-500 p-1 rounded transition-colors" title="Rename Account">
+                                        <i class="ph ph-pencil-simple text-lg"></i>
+                                    </button>
+                                    ${!isActive && this.workspaces.length > 1 ? `
+                                        <button onclick="event.stopPropagation(); app.deleteWorkspace('${ws.id}')" class="text-slate-400 hover:text-red-500 p-1 rounded transition-colors" title="Delete Account">
+                                            <i class="ph ph-trash text-lg"></i>
+                                        </button>
+                                    ` : isActive ? `<i class="ph ph-check-circle text-primary text-xl ml-1"></i>` : ''}
+                                </div>
+                            </div>
+                        `;
+                    }
                 });
                 document.getElementById('workspace-list').innerHTML = html;
             },
@@ -958,6 +981,45 @@
                     this.closeModals();
                     this.showToast('Account Deleted.');
                 });
+            },
+
+            startRenameInline(id) {
+                this.editingWorkspaceId = id;
+                this.renderWorkspaces();
+                // Automatically focus the input field for quick typing
+                setTimeout(() => {
+                    const input = document.getElementById(`inline-rename-${id}`);
+                    if (input) {
+                        input.focus();
+                        input.select();
+                    }
+                }, 50);
+            },
+
+            cancelRenameInline() {
+                this.editingWorkspaceId = null;
+                this.renderWorkspaces();
+            },
+
+            saveWorkspaceNameInline(e, id) {
+                e.preventDefault();
+                e.stopPropagation();
+                const input = document.getElementById(`inline-rename-${id}`);
+                if (!input) return;
+                
+                const newName = input.value.trim();
+                if (newName) {
+                    const ws = this.workspaces.find(w => w.id === id);
+                    if (ws) {
+                        ws.name = newName;
+                        this.saveData();
+                        this.syncDataPointer();
+                        this.renderAll();
+                        this.showToast('Account renamed!');
+                    }
+                }
+                this.editingWorkspaceId = null;
+                this.renderWorkspaces();
             },
 
             setupDraggableFab() {
@@ -1243,7 +1305,7 @@
                 let balance = 0;
                 allTx.forEach(tx => {
                     if (tx.userId === userId) {
-                        if (tx.type === 'income' || tx.type === 'borrowed') balance += Number(tx.amount);
+                        if (tx.type === 'income' || tx.type === 'borrowed' || tx.type === 'withdraw_savings') balance += Number(tx.amount);
                         if (tx.type === 'expense' || tx.type === 'lent' || tx.type === 'savings') balance -= Number(tx.amount);
                     }
                 });
@@ -1314,6 +1376,10 @@
                         totalSavings += amount;
                         if(userStats[tx.userId]) userStats[tx.userId].savings += amount;
                     }
+                    if(tx.type === 'withdraw_savings') {
+                        totalSavings -= amount;
+                        if(userStats[tx.userId]) userStats[tx.userId].savings -= amount;
+                    }
                 });
 
                 // Render Overall Cards
@@ -1349,7 +1415,7 @@
                     <div class="glass p-5 rounded-xl border-l-4 border-purple-500 bg-white dark:bg-darkCard">
                         <div class="flex items-center gap-2 text-purple-600 dark:text-purple-400 mb-2">
                             <i class="ph ph-piggy-bank text-xl"></i>
-                            <span class="font-medium">Total Saved</span>
+                            <span class="font-medium">Net Saved</span>
                         </div>
                         <p class="text-2xl font-bold">${this.fmtCurrency(totalSavings)}</p>
                     </div>
@@ -1392,7 +1458,7 @@
                                     <span class="font-medium">${this.fmtCurrency(u.borrowed)}</span>
                                 </div>
                                 <div class="flex justify-between items-center border-t border-slate-100 dark:border-darkBorder pt-2 mt-2">
-                                    <span class="text-slate-500 flex items-center gap-1 font-medium"><i class="ph ph-piggy-bank text-purple-500"></i> Saved</span>
+                                    <span class="text-slate-500 flex items-center gap-1 font-medium"><i class="ph ph-piggy-bank text-purple-500"></i> Net Saved</span>
                                     <span class="font-bold text-purple-600 dark:text-purple-400">${this.fmtCurrency(u.savings)}</span>
                                 </div>
                             </div>
@@ -1422,12 +1488,20 @@
                         totalSavedAllTime += Number(tx.amount);
                         if(userSavings[tx.userId]) userSavings[tx.userId].allTime += Number(tx.amount);
                     }
+                    if(tx.type === 'withdraw_savings') {
+                        totalSavedAllTime -= Number(tx.amount);
+                        if(userSavings[tx.userId]) userSavings[tx.userId].allTime -= Number(tx.amount);
+                    }
                 });
 
                 monthTx.forEach(tx => {
                     if(tx.type === 'savings') {
                         totalSavedMonth += Number(tx.amount);
                         if(userSavings[tx.userId]) userSavings[tx.userId].month += Number(tx.amount);
+                    }
+                    if(tx.type === 'withdraw_savings') {
+                        totalSavedMonth -= Number(tx.amount);
+                        if(userSavings[tx.userId]) userSavings[tx.userId].month -= Number(tx.amount);
                     }
                 });
 
@@ -1674,9 +1748,13 @@
                     let html = '';
                     filtered.forEach(tx => {
                         const user = this.data.users.find(u => u.id === tx.userId) || { name: 'Deleted User', color: '#94a3b8' };
-                        const isPositive = ['income', 'borrowed'].includes(tx.type);
-                        const isSavings = tx.type === 'savings';
-                        const amountClass = isPositive ? 'text-emerald-500' : (isSavings ? 'text-purple-500' : 'text-red-500');
+                        
+                        const isPositive = ['income', 'borrowed', 'withdraw_savings'].includes(tx.type);
+                        const isSavings = tx.type === 'savings' || tx.type === 'withdraw_savings';
+                        
+                        let amountClass = isPositive ? 'text-emerald-500' : 'text-red-500';
+                        if (isSavings) amountClass = 'text-purple-500';
+                        
                         const prefix = isPositive ? '+' : '-';
                         
                         let icon = 'ph-arrows-left-right';
@@ -1685,6 +1763,10 @@
                         if(tx.type === 'lent') icon = 'ph-export text-orange-500';
                         if(tx.type === 'borrowed') icon = 'ph-import text-blue-500';
                         if(tx.type === 'savings') icon = 'ph-piggy-bank text-purple-500';
+                        if(tx.type === 'withdraw_savings') icon = 'ph-hand-coins text-purple-500';
+
+                        let displayType = tx.type;
+                        if(tx.type === 'withdraw_savings') displayType = 'withdrawn from savings';
 
                         html += `
                             <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
@@ -1696,7 +1778,7 @@
                                     </div>
                                 </td>
                                 <td class="p-4 capitalize flex items-center gap-2">
-                                    <i class="ph ${icon} text-lg"></i> ${tx.type}
+                                    <i class="ph ${icon} text-lg"></i> ${displayType}
                                 </td>
                                 <td class="p-4">
                                     <p class="font-medium">${tx.category}</p>
@@ -1763,6 +1845,7 @@
             },
 
             closeModals() {
+                this.editingWorkspaceId = null;
                 const overlay = document.getElementById('modal-overlay');
                 const modals = [
                     document.getElementById('modal-tour'),
@@ -1811,6 +1894,9 @@
                 } else if(type === 'savings') {
                     catLabel.innerText = "Savings Account / Goal";
                     catInput.placeholder = "e.g. FD, Mutual Fund, Vacation";
+                } else if(type === 'withdraw_savings') {
+                    catLabel.innerText = "Withdrawn From";
+                    catInput.placeholder = "e.g. Emergency Fund, Broken FD";
                 } else {
                     catLabel.innerText = "Category";
                     catInput.placeholder = "e.g. Food, Rent";
@@ -2059,10 +2145,14 @@
                     // Sheet 1: All Transactions (Full Detail)
                     const txData = this.data.transactions.map(tx => {
                         const user = this.data.users.find(u => u.id === tx.userId);
+                        let displayType = tx.type;
+                        if(tx.type === 'withdraw_savings') displayType = 'Withdrawn From Savings';
+                        else displayType = displayType.charAt(0).toUpperCase() + displayType.slice(1);
+
                         return {
                             Date: this.fmtDate(tx.date),
                             User: user ? user.name : 'Unknown User',
-                            Type: tx.type.charAt(0).toUpperCase() + tx.type.slice(1),
+                            Type: displayType,
                             Category: tx.category,
                             Amount: tx.amount,
                             Note: tx.note || ''
@@ -2083,6 +2173,7 @@
                                 if(tx.type === 'lent') lent += amt;
                                 if(tx.type === 'borrowed') borrowed += amt;
                                 if(tx.type === 'savings') savings += amt;
+                                if(tx.type === 'withdraw_savings') savings -= amt;
                             }
                         });
                         const netBalance = (income + borrowed) - (expense + lent + savings);
@@ -2093,7 +2184,7 @@
                             "Total Expense": expense,
                             "Total Lent": lent,
                             "Total Borrowed": borrowed,
-                            "Total Savings": savings
+                            "Net Savings": savings
                         };
                     });
                     const wsUsers = XLSX.utils.json_to_sheet(userSummary.length ? userSummary : [{ Message: "No users found" }]);
@@ -2105,14 +2196,15 @@
                         const date = new Date(tx.date);
                         const monthYear = date.toLocaleString('en-GB', { month: 'short', year: 'numeric' });
                         if(!monthlyData[monthYear]) {
-                            monthlyData[monthYear] = { Month: monthYear, Income: 0, Expense: 0, Lent: 0, Borrowed: 0, Savings: 0 };
+                            monthlyData[monthYear] = { Month: monthYear, Income: 0, Expense: 0, Lent: 0, Borrowed: 0, Net_Savings: 0 };
                         }
                         const amt = Number(tx.amount);
                         if(tx.type === 'income') monthlyData[monthYear].Income += amt;
                         if(tx.type === 'expense') monthlyData[monthYear].Expense += amt;
                         if(tx.type === 'lent') monthlyData[monthYear].Lent += amt;
                         if(tx.type === 'borrowed') monthlyData[monthYear].Borrowed += amt;
-                        if(tx.type === 'savings') monthlyData[monthYear].Savings += amt;
+                        if(tx.type === 'savings') monthlyData[monthYear].Net_Savings += amt;
+                        if(tx.type === 'withdraw_savings') monthlyData[monthYear].Net_Savings -= amt;
                     });
                     
                     const monthlyArray = Object.values(monthlyData);
