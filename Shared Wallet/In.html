@@ -144,9 +144,15 @@
     <!-- Sidebar / Navigation (Desktop Only) -->
     <aside class="hidden md:flex w-20 lg:w-64 shrink-0 flex-col justify-between border-r border-slate-200 dark:border-darkBorder bg-white dark:bg-darkCard transition-colors z-20">
         <div>
-            <div class="h-16 flex items-center justify-center lg:justify-start lg:px-6 border-b border-slate-200 dark:border-darkBorder">
-                <i class="ph-fill ph-wallet text-primary text-2xl md:text-3xl"></i>
-                <span class="ml-3 font-bold text-xl hidden lg:block tracking-tight">Shared<span class="text-primary">Wallet</span></span>
+            <div class="h-16 flex items-center justify-center lg:justify-between lg:px-6 border-b border-slate-200 dark:border-darkBorder cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" onclick="app.openWorkspaceModal()">
+                <div class="flex items-center">
+                    <i class="ph-fill ph-wallet text-primary text-2xl md:text-3xl"></i>
+                    <div class="ml-3 hidden lg:block">
+                        <p class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider mb-0.5 leading-none">Account</p>
+                        <h1 class="font-bold text-sm truncate w-32 current-workspace-name">Main Account</h1>
+                    </div>
+                </div>
+                <i class="ph ph-caret-up-down text-slate-400 hidden lg:block"></i>
             </div>
             <nav class="p-2 lg:p-4 space-y-2 mt-4">
                 <button onclick="app.navigate('dashboard')" class="nav-item active w-full flex items-center p-3 rounded-xl transition-all hover:bg-slate-100 dark:hover:bg-slate-800" data-target="dashboard">
@@ -200,8 +206,12 @@
         <!-- Topbar -->
         <header class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-200 dark:border-darkBorder bg-white/80 dark:bg-darkCard/80 backdrop-blur-md z-10 shrink-0">
             <div class="flex items-center gap-2 overflow-hidden">
-                <i class="ph-fill ph-wallet text-primary text-2xl md:hidden shrink-0"></i>
-                <h2 id="page-title" class="text-lg md:text-xl font-semibold capitalize truncate pr-2">Dashboard</h2>
+                <button onclick="app.openWorkspaceModal()" class="md:hidden flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 px-2 py-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors mr-1">
+                    <i class="ph-fill ph-wallet text-primary"></i>
+                    <span class="text-xs font-semibold max-w-[80px] truncate current-workspace-name">Main</span>
+                    <i class="ph ph-caret-down text-xs text-slate-500"></i>
+                </button>
+                <h2 id="page-title" class="text-lg md:text-xl font-semibold capitalize truncate pr-2 hidden sm:block">Dashboard</h2>
             </div>
 
             <div class="flex items-center gap-2 md:gap-4 shrink-0">
@@ -535,6 +545,27 @@
     <!-- Overlay & Modals -->
     <div id="modal-overlay" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300"></div>
 
+    <!-- Workspace Modal -->
+    <div id="modal-workspace" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-sm max-h-[90dvh] overflow-y-auto glass bg-white dark:bg-darkCard rounded-2xl shadow-2xl z-50 hidden opacity-0 scale-95 transition-all duration-300 p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-semibold">Switch Account</h3>
+            <button onclick="app.closeModals()" class="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"><i class="ph ph-x text-2xl"></i></button>
+        </div>
+        
+        <div id="workspace-list" class="mb-6 max-h-60 overflow-y-auto pr-2">
+            <!-- Injected via JS -->
+        </div>
+
+        <div class="border-t border-slate-200 dark:border-darkBorder pt-4">
+            <form onsubmit="app.createWorkspace(event)" class="flex gap-2">
+                <input type="text" id="new-ws-name" required placeholder="New Account Name..." class="flex-1 px-3 py-2 text-sm rounded-lg border border-slate-200 dark:border-darkBorder bg-slate-50 dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-primary/50">
+                <button type="submit" class="bg-primary hover:bg-indigo-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap">
+                    Add
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- Transaction Modal -->
     <div id="modal-transaction" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-md max-h-[90dvh] overflow-y-auto glass bg-white dark:bg-darkCard rounded-2xl shadow-2xl z-50 hidden opacity-0 scale-95 transition-all duration-300 p-6">
         <div class="flex justify-between items-center mb-4">
@@ -665,11 +696,10 @@
     <!-- App Logic -->
     <script>
         const app = {
-            data: {
-                users: [],
-                transactions: [],
-                settings: { darkMode: false }
-            },
+            workspaces: [],
+            activeWorkspaceId: null,
+            data: null,
+            settings: { darkMode: false },
             currentView: 'dashboard',
             currentDate: new Date(),
             charts: { bar: null, doughnut: null },
@@ -679,29 +709,43 @@
             fmtDate: (dateStr) => new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(dateStr)),
             
             init() {
-                const savedUsers = localStorage.getItem('wallet_users');
-                const savedTx = localStorage.getItem('wallet_transactions');
+                const savedWorkspaces = localStorage.getItem('wallet_workspaces');
+                const activeWsId = localStorage.getItem('wallet_active_ws');
                 const savedSettings = localStorage.getItem('wallet_settings');
 
-                if(savedUsers) this.data.users = JSON.parse(savedUsers);
-                if(savedTx) this.data.transactions = JSON.parse(savedTx);
                 if(savedSettings) {
-                    this.data.settings = JSON.parse(savedSettings);
-                    if(this.data.settings.darkMode) document.documentElement.classList.add('dark');
+                    this.settings = JSON.parse(savedSettings);
+                    if(this.settings.darkMode) document.documentElement.classList.add('dark');
                 } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
                      document.documentElement.classList.add('dark');
-                     this.data.settings.darkMode = true;
+                     this.settings.darkMode = true;
                 }
 
                 this.updateThemeUI();
                 
-                if(this.data.users.length === 0) {
-                    this.data.users = [
-                        { id: 'u1', name: 'Me', color: '#4F46E5', salaryDate: 5 },
-                        { id: 'u2', name: 'Partner', color: '#ec4899', salaryDate: 10 }
-                    ];
-                    this.saveData('users');
+                if (savedWorkspaces) {
+                    this.workspaces = JSON.parse(savedWorkspaces);
+                    this.activeWorkspaceId = activeWsId || this.workspaces[0].id;
+                } else {
+                    // Migration from v1
+                    const oldUsers = localStorage.getItem('wallet_users');
+                    const oldTx = localStorage.getItem('wallet_transactions');
+                    
+                    const defaultWs = {
+                        id: 'ws_' + Date.now(),
+                        name: 'Main Account',
+                        users: oldUsers ? JSON.parse(oldUsers) : [
+                            { id: 'u1', name: 'Me', color: '#4F46E5', salaryDate: 5 },
+                            { id: 'u2', name: 'Partner', color: '#ec4899', salaryDate: 10 }
+                        ],
+                        transactions: oldTx ? JSON.parse(oldTx) : []
+                    };
+                    
+                    this.workspaces = [defaultWs];
+                    this.activeWorkspaceId = defaultWs.id;
                 }
+
+                this.syncDataPointer();
 
                 document.getElementById('tx-search').addEventListener('input', () => this.renderTransactions());
                 document.getElementById('tx-filter-user').addEventListener('change', () => this.renderTransactions());
@@ -710,6 +754,90 @@
 
                 this.setupDraggableFab();
                 this.renderAll();
+            },
+
+            syncDataPointer() {
+                const ws = this.workspaces.find(w => w.id === this.activeWorkspaceId) || this.workspaces[0];
+                this.activeWorkspaceId = ws.id;
+                this.data = ws;
+                document.querySelectorAll('.current-workspace-name').forEach(el => el.innerText = ws.name);
+            },
+
+            openWorkspaceModal() {
+                this.renderWorkspaces();
+                this.openModal('modal-workspace');
+            },
+
+            renderWorkspaces() {
+                let html = '';
+                this.workspaces.forEach(ws => {
+                    const isActive = ws.id === this.activeWorkspaceId;
+                    html += `
+                        <div class="flex items-center justify-between p-3 rounded-xl border ${isActive ? 'border-primary bg-indigo-50 dark:bg-indigo-900/30' : 'border-slate-200 dark:border-darkBorder hover:bg-slate-50 dark:hover:bg-slate-800/50'} transition-colors cursor-pointer mb-2" onclick="app.switchWorkspace('${ws.id}')">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full ${isActive ? 'bg-primary text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-500'} flex items-center justify-center">
+                                    <i class="ph-fill ph-wallet"></i>
+                                </div>
+                                <span class="font-medium ${isActive ? 'text-primary' : ''}">${ws.name}</span>
+                            </div>
+                            ${!isActive && this.workspaces.length > 1 ? `
+                                <button onclick="event.stopPropagation(); app.deleteWorkspace('${ws.id}')" class="text-slate-400 hover:text-red-500 p-1 rounded transition-colors">
+                                    <i class="ph ph-trash text-lg"></i>
+                                </button>
+                            ` : isActive ? `<i class="ph ph-check-circle text-primary text-xl"></i>` : ''}
+                        </div>
+                    `;
+                });
+                document.getElementById('workspace-list').innerHTML = html;
+            },
+
+            switchWorkspace(id) {
+                this.activeWorkspaceId = id;
+                this.syncDataPointer();
+                this.saveData();
+                this.renderAll();
+                this.closeModals();
+                this.showToast('Account Switched!');
+            },
+
+            createWorkspace(e) {
+                e.preventDefault();
+                const input = document.getElementById('new-ws-name');
+                const name = input.value.trim();
+                if(!name) return;
+
+                const newWs = {
+                    id: 'ws_' + Date.now(),
+                    name: name,
+                    users: [
+                        { id: 'u1', name: 'Me', color: '#4F46E5', salaryDate: null }
+                    ],
+                    transactions: []
+                };
+
+                this.workspaces.push(newWs);
+                this.activeWorkspaceId = newWs.id;
+                input.value = '';
+                
+                this.syncDataPointer();
+                this.saveData();
+                this.renderAll();
+                this.closeModals();
+                this.showToast('New Account Created!');
+            },
+
+            deleteWorkspace(id) {
+                this.confirmAction('Delete Account?', 'This will permanently delete this account and all its transactions.', () => {
+                    this.workspaces = this.workspaces.filter(w => w.id !== id);
+                    if(this.activeWorkspaceId === id) {
+                        this.activeWorkspaceId = this.workspaces[0].id;
+                        this.syncDataPointer();
+                    }
+                    this.saveData();
+                    this.renderAll();
+                    this.closeModals();
+                    this.showToast('Account Deleted.');
+                });
             },
 
             setupDraggableFab() {
@@ -820,9 +948,9 @@
             },
 
             saveData(key) {
-                if(key === 'users' || !key) localStorage.setItem('wallet_users', JSON.stringify(this.data.users));
-                if(key === 'transactions' || !key) localStorage.setItem('wallet_transactions', JSON.stringify(this.data.transactions));
-                if(key === 'settings' || !key) localStorage.setItem('wallet_settings', JSON.stringify(this.data.settings));
+                localStorage.setItem('wallet_workspaces', JSON.stringify(this.workspaces));
+                localStorage.setItem('wallet_active_ws', this.activeWorkspaceId);
+                localStorage.setItem('wallet_settings', JSON.stringify(this.settings));
             },
 
             navigate(viewId) {
@@ -844,10 +972,10 @@
             },
 
             toggleTheme() {
-                this.data.settings.darkMode = !this.data.settings.darkMode;
+                this.settings.darkMode = !this.settings.darkMode;
                 document.documentElement.classList.toggle('dark');
                 this.updateThemeUI();
-                this.saveData('settings');
+                this.saveData();
                 if(this.currentView === 'dashboard') this.renderCharts();
             },
 
@@ -856,7 +984,7 @@
                 const text = document.getElementById('theme-text');
                 const mobileIcon = document.getElementById('theme-icon-mobile');
                 
-                if(this.data.settings.darkMode) {
+                if(this.settings.darkMode) {
                     if(icon) icon.classList.replace('ph-moon', 'ph-sun');
                     if(mobileIcon) mobileIcon.classList.replace('ph-moon', 'ph-sun');
                     if(text) text.innerText = 'Light Mode';
@@ -1335,7 +1463,7 @@
             renderCharts() {
                 if(!document.getElementById('barChart') || this.currentView !== 'dashboard') return;
                 
-                const isDark = this.data.settings.darkMode;
+                const isDark = this.settings.darkMode;
                 const textColor = isDark ? '#cbd5e1' : '#475569';
                 const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
 
@@ -1534,6 +1662,7 @@
             closeModals() {
                 const overlay = document.getElementById('modal-overlay');
                 const modals = [
+                    document.getElementById('modal-workspace'),
                     document.getElementById('modal-transaction'), 
                     document.getElementById('modal-user'),
                     document.getElementById('modal-confirm')
@@ -1711,7 +1840,11 @@
             },
 
             exportJSON() {
-                const dataStr = JSON.stringify(this.data, null, 2);
+                const backup = {
+                    workspaces: this.workspaces,
+                    settings: this.settings
+                };
+                const dataStr = JSON.stringify(backup, null, 2);
                 const blob = new Blob([dataStr], { type: "application/json" });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
@@ -1731,24 +1864,52 @@
                 reader.onload = (e) => {
                     try {
                         const importedData = JSON.parse(e.target.result);
-                        if(importedData.users && importedData.transactions) {
-                            this.data = importedData;
+                        if(importedData.workspaces) {
+                            this.workspaces = importedData.workspaces;
+                            this.activeWorkspaceId = this.workspaces[0].id;
+                            this.settings = importedData.settings || { darkMode: false };
+                            this.syncDataPointer();
                             this.saveData();
                             this.renderAll();
+                            document.documentElement.classList.toggle('dark', this.settings.darkMode);
+                            this.updateThemeUI();
                             this.showToast('Data imported!');
+                        } else if (importedData.users && importedData.transactions) {
+                            // Support importing old format v1 backups
+                            const defaultWs = {
+                                id: 'ws_' + Date.now(),
+                                name: 'Imported Account',
+                                users: importedData.users,
+                                transactions: importedData.transactions
+                            };
+                            this.workspaces.push(defaultWs);
+                            this.activeWorkspaceId = defaultWs.id;
+                            this.syncDataPointer();
+                            this.saveData();
+                            this.renderAll();
+                            this.showToast('Legacy Data imported as new Account!');
+                        } else {
+                            throw new Error("Invalid format");
                         }
                     } catch (err) {
                         this.showToast('Invalid JSON file.', 'error');
                     }
                 };
                 reader.readAsText(file);
+                event.target.value = '';
             },
 
             resetData() {
                 this.confirmAction('Erase All Data?', 'Permanently delete ALL data?', () => {
                     localStorage.clear();
-                    this.data.users = [];
-                    this.data.transactions = [];
+                    this.workspaces = [{
+                        id: 'ws_' + Date.now(),
+                        name: 'Main Account',
+                        users: [],
+                        transactions: []
+                    }];
+                    this.activeWorkspaceId = this.workspaces[0].id;
+                    this.syncDataPointer();
                     this.renderAll();
                     this.closeModals();
                     this.showToast('Data erased.', 'error');
