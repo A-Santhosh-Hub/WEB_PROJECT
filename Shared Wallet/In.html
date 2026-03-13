@@ -845,19 +845,6 @@
                 let startX, startY, initialLeft, initialTop;
                 let hasMoved = false;
 
-                // Load saved position from previous sessions
-                const savedPos = localStorage.getItem('wallet_fab_pos');
-                if (savedPos) {
-                    try {
-                        const { left, top } = JSON.parse(savedPos);
-                        fab.style.left = left;
-                        fab.style.top = top;
-                        fab.style.transform = 'none'; // Overrides Tailwind centering classes
-                        fab.style.bottom = 'auto';
-                        fab.style.right = 'auto';
-                    } catch(e) {}
-                }
-
                 const onDown = (e) => {
                     const touch = e.touches ? e.touches[0] : e;
                     startX = touch.clientX;
@@ -887,9 +874,10 @@
                         let newLeft = initialLeft + dx;
                         let newTop = initialTop + dy;
 
-                        // Keep the button within the screen boundaries
+                        // Keep the button within the screen boundaries, avoiding the bottom nav bar
+                        const bottomNavHeight = window.innerWidth < 768 ? 80 : 0; // 80px buffer for mobile nav
                         const maxX = window.innerWidth - fab.offsetWidth;
-                        const maxY = window.innerHeight - fab.offsetHeight;
+                        const maxY = window.innerHeight - fab.offsetHeight - bottomNavHeight;
                         
                         newLeft = Math.max(0, Math.min(newLeft, maxX));
                         newTop = Math.max(0, Math.min(newTop, maxY));
@@ -909,12 +897,6 @@
                     document.removeEventListener('touchend', onUp);
 
                     if (hasMoved) {
-                        // Save the new location so it stays there next time
-                        localStorage.setItem('wallet_fab_pos', JSON.stringify({
-                            left: fab.style.left,
-                            top: fab.style.top
-                        }));
-                        
                         // Short delay before resetting moved state so the click event doesn't fire
                         setTimeout(() => { hasMoved = false; }, 50);
                     }
@@ -939,8 +921,9 @@
                     if (fab.style.left) {
                         const currentLeft = parseFloat(fab.style.left);
                         const currentTop = parseFloat(fab.style.top);
+                        const bottomNavHeight = window.innerWidth < 768 ? 80 : 0;
                         const maxX = window.innerWidth - fab.offsetWidth;
-                        const maxY = window.innerHeight - fab.offsetHeight;
+                        const maxY = window.innerHeight - fab.offsetHeight - bottomNavHeight;
                         fab.style.left = `${Math.max(0, Math.min(currentLeft, maxX))}px`;
                         fab.style.top = `${Math.max(0, Math.min(currentTop, maxY))}px`;
                     }
