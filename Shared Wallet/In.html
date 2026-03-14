@@ -674,15 +674,11 @@
                 <input type="text" id="tx-note" placeholder="Short description..." class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-darkBorder bg-slate-50 dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-primary/50">
             </div>
 
-            <button type="button" id="btn-open-upi" onclick="app.openUPI()" class="hidden w-full bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-800/50 text-primary hover:bg-indigo-100 dark:hover:bg-indigo-900/50 font-medium py-3 rounded-xl transition-colors flex justify-center items-center gap-2 mt-2">
-                <i class="ph ph-qr-code text-xl"></i> Open UPI App (GPay, PhonePe...)
-            </button>
-
             <div class="flex gap-3 pt-2">
                 <button type="button" onclick="app.closeModals()" class="w-1/3 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-white font-medium py-3 rounded-xl transition-colors">
                     Cancel
                 </button>
-                <button type="submit" class="w-2/3 bg-primary hover:bg-indigo-700 text-white font-medium py-3 rounded-xl shadow-md transition-colors">
+                <button type="submit" id="tx-submit-btn" class="w-2/3 bg-primary hover:bg-indigo-700 text-white font-medium py-3 rounded-xl shadow-md transition-colors flex justify-center items-center gap-2">
                     Save Transaction
                 </button>
             </div>
@@ -1885,7 +1881,7 @@
                 const type = document.getElementById('tx-type').value;
                 const catLabel = document.getElementById('tx-cat-label');
                 const catInput = document.getElementById('tx-category');
-                const upiBtn = document.getElementById('btn-open-upi');
+                const submitBtn = document.getElementById('tx-submit-btn');
 
                 if(type === 'lent') {
                     catLabel.innerText = "Lent To";
@@ -1907,18 +1903,17 @@
                     catInput.placeholder = "e.g. Food, Rent";
                 }
 
-                // Show UPI button only for outbound money types
+                // Transform the save button into a Save+UPI button for outbound money
                 if (['expense', 'lent', 'savings'].includes(type)) {
-                    upiBtn.classList.remove('hidden');
+                    submitBtn.innerHTML = '<i class="ph ph-qr-code text-xl"></i> Save & Pay (UPI)';
                 } else {
-                    upiBtn.classList.add('hidden');
+                    submitBtn.innerHTML = 'Save Transaction';
                 }
             },
 
             openUPI() {
                 // This generic URI scheme prompts the mobile OS to show installed UPI apps
                 window.location.href = 'upi://pay';
-                this.showToast('Opening UPI Apps...');
             },
 
             openTransactionModal(txId = null) {
@@ -1955,9 +1950,10 @@
             saveTransaction(e) {
                 e.preventDefault();
                 const id = document.getElementById('tx-id').value;
+                const txType = document.getElementById('tx-type').value;
                 const tx = {
                     id: id || 'tx_' + Date.now(),
-                    type: document.getElementById('tx-type').value,
+                    type: txType,
                     userId: document.getElementById('tx-user').value,
                     amount: Number(document.getElementById('tx-amount').value),
                     category: document.getElementById('tx-category').value,
@@ -1975,7 +1971,14 @@
                 this.saveData('transactions');
                 this.closeModals();
                 this.renderAll();
-                this.showToast('Transaction saved!');
+                
+                // If it's an outbound payment, save it and immediately trigger the UPI app
+                if (['expense', 'lent', 'savings'].includes(txType)) {
+                    this.showToast('Saved! Opening UPI Apps...');
+                    setTimeout(() => this.openUPI(), 500); // Slight delay for UI to close smoothly
+                } else {
+                    this.showToast('Transaction saved!');
+                }
             },
 
             deleteTransaction(id) {
